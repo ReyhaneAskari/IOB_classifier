@@ -1,0 +1,36 @@
+As a part of our interview process, we ask candidates to do programming questions. This question test your ability to build an entity extraction system.
+
+In this folder is a file where the data is annotated with IOB tags for different entities. We would like you to build an extraction system that can take in a sentence and extract out the entities.
+
+You can use the word2vec representations for those words appearing in the provided data. The word vectors have dimension 300 and are taken from the google news vectors provided at http://code.google.com/p/word2vec/. The vectors are given in a tab separated file with the first column being the word and the next 300 columns the vector values. For some of the words in the corpus there does not exist a corresponding word vector since these words did not appear in the google news corpus. You will need to figure out how to handle these cases. If you do not wish to use the given word vectors you are free to use any resource to create your own vectors. Please provide the vectors and describe how they were determined. 
+
+We'd like you to use two methods to solve this problem. One method is a deep learning algorithm (e.g., RNN , ConvNet, etc.) and another method is with a CRF. 
+
+You don't need to start everything from scratch. You can use any machine learning toolkit that you are comfortable with. For example, Theano for deep learning and CRFsuite for CRF.
+ 
+We'd like you to provide at least the following:
+- A document that reports the specific environment, toolkits, features, and algorithms you use and the performance results you get. Also explain the reason you choose these methods and analyze the performance.
+- A Python program that will take in a sentence and output the IOB tag's associated with that sentence. 
+- The scripts that you used to train and test your model.
+- The model itself.
+- Any other files that are necessary to reproduce your results.
+
+Do not send the data back to us (unless of course you made your own data).
+Do not send .DS_Store files, nor __MACOSX folders to us.
+
+You can include as many external files as you'd like, as long as you have a simple way to use your solution. We have our own test set which will be used for a precision and recall analysis on the entities.
+
+You may assume that the environment running the script you provide has Python 2.7, word2vec, and CRFsuite set up. More specifics on the running environment can be provided upon request.
+
+
+Here is an example using Python of how your script should look when we run it:
+
+$ python NER.py
+Type a query (type "exit" to exit):
+news about Obama
+
+news	B-NEWSTYPE
+about	O
+Obama	B-KEYWORDS
+
+Type a query (type "exit" to exit):

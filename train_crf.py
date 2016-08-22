@@ -1,14 +1,14 @@
 import numpy as np
 import pycrfsuite
-from load_DB import load_data
+from load_DB import load_data, get_vectors
 
-INPUTS, MASKS, TARGETS = load_data()
+INPUTS, MASKS, TARGETS, word_2_vec, index_to_target = load_data()
 
 trainer = pycrfsuite.Trainer(verbose=True, algorithm='l2sgd')
 
-for i in range(800):
+for i in range(1000):
     # trainer expects string and not int!
-    T = [str(i) for i in np.argmax(TARGETS[i], axis=1)]
+    T = [index_to_target[i] for i in np.argmax(TARGETS[i], axis=1)]
     length = int(np.sum(MASKS[i]))
     trainer.append(INPUTS[i][:length], T[:length])
 
@@ -20,16 +20,16 @@ trainer.set_params({
     'feature.possible_transitions': True
 })
 
-print trainer.params()
 trainer.train('crf_model')
-print len(trainer.logparser.iterations), trainer.logparser.iterations[-1]
-
 tagger = pycrfsuite.Tagger()
 tagger.open('crf_model')
+while True: 
+    sample_sentence  = raw_input('Type a query (type "exit" to exit): \n')
+    if sample_sentence == "exit":
+        break
+    sample_input =[sample_sentence.strip().lower().split()]
+    sentence_vec = get_vectors(sample_input, word_2_vec)[0]          
+    print tagger.tag(sentence_vec[0])
 
-for i in np.arange(800, 1000):
-    length = int(np.sum(MASKS[i]))
-    INPUT = INPUTS[i][:length]
-    TARGET = np.argmax(TARGETS[i], axis=1)[:length]
-    print("Predicted:", ' '.join(tagger.tag(INPUT)))
-    print("Correct:  ", ' '.join([str(i) for i in TARGET]))
+    
+    
